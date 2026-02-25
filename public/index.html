@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>بات محيبس</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- Audio unlock overlay -->
+  <div id="audio-unlock" class="audio-unlock">
+    <div class="audio-unlock-box">
+      <div class="au-title">🎵 بات محيبس</div>
+      <div class="au-sub">اضغط للبدء وتفعيل الصوت</div>
+      <button id="au-btn" class="btn btn-gold au-btn">▶ ابدأ اللعبة</button>
+    </div>
+  </div>
+
+  <!-- Lang toggle -->
+  <button id="lang-toggle">🌐 English</button>
+
+  <div id="app">
+
+    <!-- ═══════════ LOBBY ═══════════ -->
+    <div id="screen-lobby" class="screen active">
+      <div class="hero-title">
+        <span class="title-main" data-ar="بات محيبس" data-en="BAT MHAIBIS">بات محيبس</span>
+      </div>
+      <div class="subtitle" data-ar="خبّ واطلع — الخاتم يختبي، والباحث يدور" data-en="Hide & Seek — The ring hides, the searcher hunts">
+        خبّ واطلع — الخاتم يختبي، والباحث يدور
+      </div>
+      <div class="card lobby-card">
+        <input id="player-name" type="text"
+          data-ph-ar="اسمك" data-ph-en="Your Name"
+          placeholder="اسمك" maxlength="20"/>
+        <button id="btn-create" class="btn btn-primary mt14"
+          data-ar="إنشاء غرفة" data-en="Create Room">إنشاء غرفة</button>
+        <div class="divider" data-ar="— أو —" data-en="— or —">— أو —</div>
+        <div class="join-row">
+          <input id="room-code-input" type="text"
+            data-ph-ar="رمز الغرفة" data-ph-en="ROOM CODE"
+            placeholder="رمز الغرفة" maxlength="5"/>
+          <button id="btn-join" class="btn btn-secondary"
+            data-ar="دخول" data-en="Join">دخول</button>
+        </div>
+        <div id="lobby-error" class="error-msg"></div>
+      </div>
+    </div>
+
+    <!-- ═══════════ GAME SCREEN ═══════════ -->
+    <div id="screen-waiting" class="screen">
+
+      <div class="room-header">
+        <div class="room-code-display">
+          <span class="rc-label" data-ar="رمز الغرفة" data-en="Room Code">رمز الغرفة</span>
+          <span id="display-code" class="rc-code"></span>
+        </div>
+        <div class="score-display">
+          <div class="score-block">
+            <span class="score-team" data-ar="الفريق الأول" data-en="Team A">الفريق الأول</span>
+            <span id="score-a" class="score-val">0</span>
+          </div>
+          <div class="score-sep">:</div>
+          <div class="score-block">
+            <span id="score-b" class="score-val">0</span>
+            <span class="score-team" data-ar="الفريق الثاني" data-en="Team B">الفريق الثاني</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="status-text" class="status-text"></div>
+
+      <div class="teams-container">
+        <div class="team-panel team-a">
+          <div class="team-label team-a-label" data-ar="⚔ الفريق الأول" data-en="⚔ TEAM A">⚔ الفريق الأول</div>
+          <div id="team-a-list" class="player-list"></div>
+        </div>
+        <div class="team-panel team-b">
+          <div class="team-label team-b-label" data-ar="الفريق الثاني ⚔" data-en="TEAM B ⚔">الفريق الثاني ⚔</div>
+          <div id="team-b-list" class="player-list"></div>
+        </div>
+      </div>
+
+      <!-- ── LOBBY PHASE ── -->
+      <div id="phase-lobby" class="phase-panel">
+        <button id="btn-start" class="btn btn-gold hidden"
+          data-ar="▶ بدء اللعبة" data-en="▶ Start Game">▶ بدء اللعبة</button>
+        <div id="waiting-msg" class="waiting-msg"
+          data-ar="في انتظار المضيف للبدء..." data-en="Waiting for host to start...">
+          في انتظار المضيف للبدء...
+        </div>
+      </div>
+
+      <!-- ── COIN TOSS PHASE ── -->
+      <div id="phase-coin-toss" class="phase-panel hidden">
+        <div class="phase-title" id="coin-toss-title"></div>
+        <button id="btn-coin-toss" class="btn btn-gold btn-huge hidden">🪙 رمي العملة</button>
+        <button id="btn-proceed" class="btn btn-gold hidden">▶ ابدأ الجولة</button>
+        <div id="coin-wait" class="waiting-msg hidden"></div>
+      </div>
+
+      <!-- ── SELECT RING PHASE ── -->
+      <div id="phase-select-ring" class="phase-panel hidden">
+        <div class="phase-title" id="ring-phase-title"></div>
+        <div id="hide-timer-display" class="hide-timer-display hidden"></div>
+        <div id="ring-selector" class="ring-selector"></div>
+      </div>
+
+      <!-- ── BAT PHASE ── -->
+      <div id="phase-bat" class="phase-panel hidden">
+        <div class="phase-title" id="bat-phase-title"></div>
+        <button id="btn-bat" class="btn btn-gold btn-huge hidden">🏏 بات!</button>
+        <div id="bat-wait" class="waiting-msg"></div>
+      </div>
+
+      <!-- ── SELECT TAYER PHASE ── -->
+      <div id="phase-select-tayer" class="phase-panel hidden">
+        <div class="phase-title" id="tayer-phase-title"></div>
+        <div id="tayer-selector" class="tayer-selector"></div>
+      </div>
+
+      <!-- ── SEARCH PHASE ── -->
+      <div id="phase-search" class="phase-panel hidden">
+        <div class="phase-title" id="search-phase-title"></div>
+        <div id="tayer-info" class="tayer-info"></div>
+        <div id="hands-grid" class="hands-grid"></div>
+        <div id="search-wait" class="waiting-msg hidden"></div>
+      </div>
+
+      <!-- ── ROUND END ── -->
+      <div id="phase-round-end" class="phase-panel hidden">
+        <div class="raja3-text" id="raja3-text">رجع!</div>
+        <div id="round-result" class="round-result"></div>
+        <div id="ring-reveal" class="ring-reveal"></div>
+        <div id="countdown-text" class="countdown-text"></div>
+        <button id="btn-next-round" class="btn btn-gold hidden"></button>
+        <div id="next-wait" class="waiting-msg hidden"></div>
+      </div>
+
+      <!-- ── GAME OVER ── -->
+      <div id="phase-game-over" class="phase-panel hidden">
+        <div class="game-over-title" id="gameover-title">🏆 انتهت اللعبة 🏆</div>
+        <div id="winner-text" class="winner-text"></div>
+        <div id="final-score" class="final-score"></div>
+      </div>
+
+    </div><!-- /screen-waiting -->
+  </div><!-- /app -->
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "bat-mhaibis",
+  "version": "1.0.0",
+  "description": "Bat Mhaibis multiplayer game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  }
+}
